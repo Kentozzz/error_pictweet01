@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'ツイート投稿', type: :system do
   before do
     @user = FactoryBot.create(:user)
-    @tweet_text = Faker::Lorem.sentence
+    @tweet_text = Faker::Lorem.sentence 
     @tweet_image = Faker::Lorem.sentence
   end
   context 'ツイート投稿ができるとき'do
@@ -28,7 +28,7 @@ RSpec.describe 'ツイート投稿', type: :system do
       # トップページに遷移する
       visit root_path
       # トップページには先ほど投稿した内容のツイートが存在する（画像）
-      expect(page).to have_selector ".content_post[style='background-image: url(#{@tweet_image});']"
+      expect(page).to have_selector ".content_post[style='background-image: url(#{@tweet_image});']" #have_selector→指定したセレクタが存在するかどうかを判断する
       # トップページには先ほど投稿した内容のツイートが存在する（テキスト）
       expect(page).to have_content(@tweet_text)
     end
@@ -45,8 +45,8 @@ end
 
 RSpec.describe 'ツイート編集', type: :system do
   before do
-    @tweet1 = FactoryBot.create(:tweet)
-    @tweet2 = FactoryBot.create(:tweet)
+    @tweet1 = FactoryBot.create(:tweet) #アソシエーションによってUse1と一緒にtweetも保存した
+    @tweet2 = FactoryBot.create(:tweet) #User2とtweet2も自動生成
   end
   context 'ツイート編集ができるとき' do
     it 'ログインしたユーザーは自分が投稿したツイートの編集ができる' do
@@ -54,8 +54,10 @@ RSpec.describe 'ツイート編集', type: :system do
       sign_in(@tweet1.user)
       # ツイート1に「編集」ボタンがある
       expect(
-        all(".more")[1].hover
+        all(".more")[1].hover #.moreクラスはたくさんあるのでfindではなくallを使う[1]は２番めのtweetのこと
       ).to have_link '編集', href: edit_tweet_path(@tweet1)
+      #expect("要素").to have_link 'ボタンの文字列', href: "リンク先のパス"と記述することで、要素の中に当てはまるリンクがあることを確認できます。
+      #↑a要素に使うもの
       # 編集ページへ遷移する
       visit edit_tweet_path(@tweet1)
       # すでに投稿済みの内容がフォームに入っている
@@ -90,9 +92,10 @@ RSpec.describe 'ツイート編集', type: :system do
       sign_in(@tweet1.user)
       # ツイート2に「編集」ボタンがない
       expect(
-        all(".more")[0].hover
-      ).to have_no_link '編集', href: edit_tweet_path(@tweet2)
-    end
+        all(".more")[0].hover #[0]は１つ目のtweet。もちろんfindじゃなくてall
+      ).to have_no_link '編集', href: edit_tweet_path(@tweet2) #have_linkの逆
+      #2つ目のツイートのmoreクラスにカーソルをあわせたときに、「「編集」という@tweet1の編集へのリンクがあること」になる
+    end 
     it 'ログインしていないとツイートの編集画面には遷移できない' do
       # トップページにいる
       visit root_path

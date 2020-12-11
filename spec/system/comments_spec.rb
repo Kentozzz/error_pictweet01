@@ -12,7 +12,7 @@ RSpec.describe 'コメント投稿', type: :system do
     # ツイート詳細ページに遷移する
     visit tweet_path(@tweet)
     # フォームに情報を入力する
-    fill_in 'text', with: @comment
+    fill_in 'comment_text', with: @comment
     # コメントを送信すると、Commentモデルのカウントが1上がる
     expect{
       find('input[name="commit"]').click

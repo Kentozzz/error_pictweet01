@@ -7,3 +7,4 @@ module SignInSupport
     expect(current_path).to eq root_path
   end
 end
+#これまで各テストコードに配置してあったログインのステップがそのまま移設したイメージです

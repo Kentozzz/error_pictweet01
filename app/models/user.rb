@@ -6,5 +6,5 @@ class User < ApplicationRecord
   has_many :tweets
   has_many :comments
 
-  validates :nickname, presence: true, length: { maximum: 6 }
+  validates :nickname, presence: true, length: { maximum: 6 } #文字数制限のバリデーション。これを設定したらtext_fieldタグに付いているmaxlength: 6を削除
 end
